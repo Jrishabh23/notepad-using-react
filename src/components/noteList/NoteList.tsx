@@ -1,6 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/context";
+import useLocalStorageData from "../../custom-hooks/useLocalStorageData";
+import localStorageData from "../../custom-hooks/useLocalStorageData";
 import {
     getNoteData,
     logoutUser,
@@ -14,13 +16,10 @@ const NoteList = () => {
     const { loginUser, setLoginUser } = useContext(UserContext);
 
     useEffect(() => {
-        console.log(loginUser, typeof loginUser);
         if (!loginUser) {
             return navigate("/");
         }
-
         const data = getNoteData(loginUser);
-        console.log(data);
         setNoteList(data);
     }, []);
 
