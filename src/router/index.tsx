@@ -19,4 +19,3 @@ const Router = () => {
     );
 };
 export default Router;
-// 404 route missing

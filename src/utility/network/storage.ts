@@ -3,6 +3,7 @@ export const getData = (id: string) => {
     if (response) return JSON.parse(response);
     return null;
 };
+
 export const setData = (key: string, data: {}) => {
     localStorage.setItem(key, JSON.stringify(data));
 };
@@ -25,7 +26,9 @@ export const getNoteData = (id: string) => {
     note = JSON.parse(note);
     return note[id] ?? [];
 };
-
+/**
+ * @desc logout user
+ */
 export const logoutUser = () => {
-    localStorage.removeItem("current")
-}
+    localStorage.removeItem("current");
+};
