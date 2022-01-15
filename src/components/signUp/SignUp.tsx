@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Button from "../../components/subComponent/button/Button";
 import Input from "../../components/subComponent/input/Input";
 import { Config } from "../../config/constant";
@@ -6,7 +6,7 @@ import { EncodeImage } from "../../utility/image_convertor";
 import Validators from "../../utility/validations";
 import "./SignUp.css";
 import { useNavigate } from "react-router";
-import { getData } from "../../utility/network/storage";
+import { UserContext } from "../../context/context";
 const ERROR_MSG: any = {
     name: "",
     userName: "",
@@ -18,6 +18,7 @@ const ERROR_MSG: any = {
 };
 const SignUp = () => {
     const navigate = useNavigate();
+    const userName: any = useContext(UserContext);
     const [userDetails, setUserDetails] = useState<any>({
         name: "",
         userName: "",
@@ -29,8 +30,7 @@ const SignUp = () => {
     });
 
     useEffect(() => {
-        const data = getData("current");
-        if (data) navigate("/noteList");
+        if (userName) navigate("/noteList");
     }, []);
 
     const checkValidation = (name: any): boolean => {

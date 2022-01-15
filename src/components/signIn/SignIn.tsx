@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/subComponent/button/Button";
 import Input from "../../components/subComponent/input/Input";
+import { UserContext } from "../../context/context";
 import { getData, setData } from "../../utility/network/storage";
 import Validators from "../../utility/validations";
 const ERROR_MSG: any = {
@@ -10,14 +11,19 @@ const ERROR_MSG: any = {
 };
 const SignIn = () => {
     const navigator = useNavigate();
+    const { loginUser, setLoginUser } = useContext(UserContext);
     const [userDetails, setUserDetails] = useState<any>({
         email: "",
         password: "",
     });
 
     useEffect(() => {
-        const data = getData("current");
-        if (data) navigator("/noteList");
+        // console.log(loginUser);
+        // if (loginUser) {
+        //     console.log("bye");
+        //     navigator("/noteList");
+        // }
+        console.log("hello");
     }, []);
 
     const checkValidation = (name: any): boolean => {
@@ -41,7 +47,8 @@ const SignIn = () => {
             return;
         }
         if (response["password"] === userDetails["password"]) {
-            setData("current", userDetails);
+            setData("current", { email: userDetails["email"] });
+            setLoginUser(userDetails["email"]);
             navigator("/noteList");
             return;
         }

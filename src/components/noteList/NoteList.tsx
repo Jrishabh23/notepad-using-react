@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import dateConvertor from "../../utility/network/date_convertor";
+import { UserContext } from "../../context/context";
 import {
-    getData,
     getNoteData,
     logoutUser,
     saveNoteData,
@@ -12,26 +11,29 @@ import Button from "../subComponent/button/Button";
 const NoteList = () => {
     const navigate = useNavigate();
     const [noteList, setNoteList] = useState<[]>([]);
+    const { loginUser, setLoginUser } = useContext(UserContext);
 
     useEffect(() => {
-        const loginUser = getData("current");
+        console.log(loginUser, typeof loginUser);
         if (!loginUser) {
             return navigate("/");
         }
-        const data = getNoteData(loginUser["email"]);
+
+        const data = getNoteData(loginUser);
+        console.log(data);
         setNoteList(data);
     }, []);
 
     const deleteUser = (id: number) => {
-        const loginUser = getData("current");
-        const data = getNoteData(loginUser["email"]);
+        const data = getNoteData(loginUser);
         data.splice(id, 1);
-        saveNoteData(loginUser["email"], data);
+        saveNoteData(loginUser, data);
         setNoteList(data);
     };
 
     const logoutCurrentUser = () => {
         logoutUser();
+        setLoginUser("");
         return navigate("/");
     };
 

@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { UserContext } from "../../context/context";
 import {
-    getData,
     getNoteData,
     logoutUser,
     saveNoteData,
@@ -12,6 +12,7 @@ import Input from "../subComponent/input/Input";
 const NoteAdd = () => {
     const params = useParams();
     const navigate = useNavigate();
+    const { loginUser, setLoginUser } = useContext(UserContext);
     const [noteDetails, setNoteDetails] = useState<any>({
         title: "",
         description: "",
@@ -25,13 +26,12 @@ const NoteAdd = () => {
     };
 
     useEffect(() => {
-        const loginUser = getData("current");
         if (!loginUser) {
             return navigate("/");
         }
         const id: any = params["id"];
         if (id) {
-            const noteData = getNoteData(loginUser["email"]);
+            const noteData = getNoteData(loginUser);
             const currentNote = noteData[id];
             setNoteDetails({
                 ...noteDetails,
@@ -45,18 +45,18 @@ const NoteAdd = () => {
      * note:
      */
     const submit = () => {
-        const login_user = getData("current");
-        const previousData = getNoteData(login_user["email"]);
+        const previousData = getNoteData(loginUser);
         if (params["id"]) {
             previousData.splice(params["id"], 1);
         }
         previousData.splice(0, 0, noteDetails);
-        saveNoteData(login_user["email"], previousData);
+        saveNoteData(loginUser, previousData);
         navigate("/noteList");
     };
 
     const logoutCurrentUser = () => {
         logoutUser();
+        setLoginUser("");
         return navigate("/");
     };
     return (
